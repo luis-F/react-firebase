@@ -1,26 +1,33 @@
 import React from 'react';
-import logo from './logo.svg';
+import {BrowserRouter, Switch, Route} from 'react-router-dom';
 import './App.css';
 
+import LoginCadastro from './pages/login_cadastro';
+import Pesquisa from './pages/pesquisa';
+import Grafico from './pages/graficos';
+import firebase from "./firebase/firebase";
+
+import {CircularProgress} from '@material-ui/core';
+//https://www.youtube.com/watch?v=K_wZCW6wXIo -> ajuda
+
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [firebaseInitialized, setFirebaseInitialized] = React.useState(false);
+
+  React.useEffect(() => {
+    firebase.isInitialized().then(val => {
+      setFirebaseInitialized(val)
+    })
+  })
+
+  return firebaseInitialized !== false ? (
+    <BrowserRouter>
+      <Switch>
+        <Route exact path='/' component={LoginCadastro}/>
+        <Route exact path='/pesquisa' component={Pesquisa}/>
+        <Route exact path='/grafico' component={Grafico}/>
+      </Switch>
+    </BrowserRouter>
+  ) : <div id='loader'><CircularProgress/></div>
 }
 
 export default App;
