@@ -2,13 +2,32 @@ import React from 'react';
 import FormLoginCadastro from '../components/formFields_component';
 
 import Tabs from '@material-ui/core/Tabs';
-import {withStyles} from '@material-ui/core/styles';
+import {withStyles, makeStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Tab from '@material-ui/core/Tab';
 import PropTypes from 'prop-types';
+import Box from '@material-ui/core/Box';
 
 import Header from '../components/header_component';
 import firebase from '../firebase/firebase';
+
+const useStyles = makeStyles(theme => ({
+  cardbox: {
+    border: '1px solid #ced4da',
+    display: 'flex',
+    flexDirection: 'column',
+    width: '380px',
+    maxWidth: '80%',
+    minWidth: '100px',
+    minHeight: '200px',
+    borderRadius: '6px',
+    boxShadow: '0px 8px 36px #222',
+    backgroundColor: '#fefefe',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    alignItems: 'center'
+  },
+}));
 
 const AntTabs = withStyles({
   root: {
@@ -22,12 +41,9 @@ const AntTabs = withStyles({
 const AntTab = withStyles(theme => ({
   root: {
     textTransform: 'none',
-    //minWidth: 72,
-    // maxWidth: '45%',
     width: '50%',
     fontSize: 16,
     fontWeight: theme.typography.fontWeightRegular,
-    // marginRight: theme.spacing(4),
     fontFamily: [
       '-apple-system',
       'BlinkMacSystemFont',
@@ -87,6 +103,8 @@ function a11yProps(index) {
 
 function LoginCadastro(props) {
   const [value, setValue] = React.useState(0);
+  const classes = useStyles();
+  const pagina = "Login";
 
   if(firebase.auth.currentUser){
     props.history.push('/grafico');
@@ -98,18 +116,20 @@ function LoginCadastro(props) {
   return (
     <div>
       <React.Fragment>
-       <Header props={props}/>
+       <Header pagina={pagina}/>
       </React.Fragment>
-      <AntTabs value={value} onChange={handleChange} aria-label="ant example">
-        <AntTab label="Cadastro" {...a11yProps(0)}/>
-        <AntTab label="Login" {...a11yProps(1)}/>
-      </AntTabs>
-      <TabPanel value={value} index={0}>
-        <FormLoginCadastro props={props}/>
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <FormLoginCadastro props={props} mode={1}/>
-      </TabPanel>
+      <Box boxShadow={3} bgcolor="background.paper" m={1} p={1} className={classes.cardbox}>
+        <AntTabs value={value} onChange={handleChange} aria-label="ant example">
+          <AntTab label="Cadastro" {...a11yProps(0)}/>
+          <AntTab label="Login" {...a11yProps(1)}/>
+        </AntTabs>
+        <TabPanel value={value} index={0}>
+          <FormLoginCadastro props={props}/>
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <FormLoginCadastro props={props} mode={1}/>
+        </TabPanel>
+      </Box>
     </div>
   );
 }

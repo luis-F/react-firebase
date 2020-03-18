@@ -40,6 +40,9 @@ class Firebase {
   getCurrentUsername(){
     return this.auth.currentUser.displayName
   }
+  add_result(data){
+    return this.db.collection('result_table').doc(this.auth.currentUser.email).set(data);
+  }
 }
 
 export default new Firebase();

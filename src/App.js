@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter, Switch, Route} from 'react-router-dom';
+import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
 import './App.css';
 
 import LoginCadastro from './pages/login_cadastro';
@@ -8,7 +8,6 @@ import Grafico from './pages/graficos';
 import firebase from "./firebase/firebase";
 
 import {CircularProgress} from '@material-ui/core';
-//https://www.youtube.com/watch?v=K_wZCW6wXIo -> ajuda
 
 function App() {
   const [firebaseInitialized, setFirebaseInitialized] = React.useState(false);
@@ -19,12 +18,22 @@ function App() {
     })
   })
 
+ const PrivateRoute = ({component: ChildComponent, ...rest}) => {
+    return <Route {...rest} render={props => {
+      if (!firebase.auth.currentUser) {
+        return <Redirect to="/" />;
+      } else {
+        return <ChildComponent {...props} />
+      }
+    }} />
+  }
+
   return firebaseInitialized !== false ? (
     <BrowserRouter>
       <Switch>
         <Route exact path='/' component={LoginCadastro}/>
-        <Route exact path='/pesquisa' component={Pesquisa}/>
-        <Route exact path='/grafico' component={Grafico}/>
+        <PrivateRoute exact path='/pesquisa' component={Pesquisa}/>
+        <PrivateRoute exact path='/grafico' component={Grafico}/>
       </Switch>
     </BrowserRouter>
   ) : <div id='loader'><CircularProgress/></div>
