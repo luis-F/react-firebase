@@ -1,10 +1,10 @@
 import React from 'react';
 import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
-import './App.css';
 
 import LoginCadastro from './pages/login_cadastro';
 import Pesquisa from './pages/pesquisa';
 import Grafico from './pages/graficos';
+
 import firebase from "./firebase/firebase";
 
 import {CircularProgress} from '@material-ui/core';

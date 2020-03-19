@@ -4,7 +4,7 @@ import {
   ResponsiveContainer
 } from 'recharts';
 
-function GraficoBarChart({data, graficoValue}){
+function GraficoBarChart({data, valueColor}){
   return (
     <div>
       <ResponsiveContainer width="100%" height={200}>
@@ -18,12 +18,12 @@ function GraficoBarChart({data, graficoValue}){
          >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name">
-            <Label value={graficoValue} offset={0} position="insideBottomLeft"/>
+            <Label offset={0} position="insideBottomLeft"/>
           </XAxis>
           <YAxis label={{ value: 'votantes', angle: -90, position: 'insideLeft' }} />
           <Tooltip />
-          <Legend verticalAlign="top" align="right" height={36}/>
-          <Bar dataKey="val" fill="#8884d8" />
+          <Legend verticalAlign="bottom" align="center" height={36}/>
+          <Bar dataKey="media de respostas" fill={valueColor} />
         </BarChart>
       </ResponsiveContainer>
     </div>

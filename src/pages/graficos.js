@@ -1,14 +1,36 @@
 import React from 'react';
-import firebase from '../firebase/firebase';
+
 import Header from '../components/header_component';
 import GraficoBarChart from '../components/barchart_component';
+import GraficoPieChart from '../components/piechart_component';
+
+import firebase from '../firebase/firebase';
+
 import Box from '@material-ui/core/Box';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(() => ({
+  root: {
+    backgroundColor: '#bfbcbb'
+  },
+  titlegraphic: {
+    fontSize: 32,
+    fontFamily: 'sans-serif',
+    color: '#878383'
+  },
+  box: {
+    backgroundColor: '#f2f0f0',
+    maxWidth: '85%',
+    marginLeft: '7%'
+  }
+}));
 
 //Não consigo entender muito bem como que funciona o Promise,
 //então fiz essa gambiarra com o useEffect
 function Grafico(props){
   const [value, setValue] = React.useState([]);
   const [total, setTotal] = React.useState(0);
+  const classes = useStyles();
   let data_pesquisa = null;
   let pagina = "Resultados";
 
@@ -23,7 +45,7 @@ function Grafico(props){
   }, [])
 
   if(value !== undefined){
-    data_pesquisa = tratarDados(value, total);
+    data_pesquisa = TratarDados(value, total);
   }
 
   if(!firebase.auth.currentUser){
@@ -31,52 +53,58 @@ function Grafico(props){
     props.history.push('/')
   }
   return (
-    <div>
+    <div className={classes.root}>
       <React.Fragment>
        <Header pagina={pagina}/>
       </React.Fragment>
-      <Box boxShadow={3} bgcolor="background.paper" m={1} p={1}>
+      <Box boxShadow={3} bgcolor="background.paper" className={classes.box}>
+        <p className={classes.titlegraphic}>Quantidade de funcionários</p>
         <FuncionariosGrafico data={data_pesquisa['data_funcionarios']}/>
       </Box>
-      <Box boxShadow={3} bgcolor="background.paper" m={1} p={1}>
+      <Box boxShadow={3} bgcolor="background.paper" className={classes.box}>
+        <p className={classes.titlegraphic}>Integrantes de equipe</p>
         <EquipeGrafico data={data_pesquisa['data_equipe']}/>
       </Box>
-      <Box boxShadow={3} bgcolor="background.paper" m={1} p={1}>
+      <Box boxShadow={3} bgcolor="background.paper" className={classes.box}>
+        <p className={classes.titlegraphic}>Grau de satisfação</p>
         <SatisfacaoGrafico data={data_pesquisa['data_satisfacao']}/>
       </Box>
-      <Box boxShadow={3} bgcolor="background.paper" m={1} p={1}>
+      <Box boxShadow={3} bgcolor="background.paper" className={classes.box}>
+        <p className={classes.titlegraphic}>Avaliação do chefe</p>
         <AvaliacaoGrafico data={data_pesquisa['data_avaliacao']}/>
+        <p className={classes.titlegraphic}>Percentual das avaliações</p>
+        <GraficoPieChart data={data_pesquisa['data_avaliacao']}/>
       </Box>
     </div>
   )
 }
 
 function FuncionariosGrafico({data}){
-  const graficoValue = "Funcionários"
+  const valueColor = "#8884d8"
   return(
-    <GraficoBarChart data={data} graficoValue={graficoValue}/>
+    <GraficoBarChart data={data} valueColor={valueColor}/>
   )
 }
 function EquipeGrafico({data}){
-  const graficoValue = "Equipes"
+  const valueColor = "#e61010"
   return(
-    <GraficoBarChart data={data} graficoValue={graficoValue}/>
+    <GraficoBarChart data={data} valueColor={valueColor}/>
   )
 }
 function SatisfacaoGrafico({data}){
-  const graficoValue = "Satisfação"
+  const valueColor = "#0088FE"
   return(
-    <GraficoBarChart data={data} graficoValue={graficoValue}/>
+    <GraficoBarChart data={data} valueColor={valueColor}/>
   )
 }
 function AvaliacaoGrafico({data}){
-  const graficoValue = "Avaliação"
+  const valueColor = "#13a608"
   return(
-    <GraficoBarChart data={data} graficoValue={graficoValue}/>
+    <GraficoBarChart data={data} valueColor={valueColor}/>
   )
 }
 
-function tratarDados(value, total){
+function TratarDados(value, total){
   let result = {"1-50": 0,"51-100": 0,"101-200": 0,"201-500": 0,"+500": 0};
   let result2 ={"1-3": 0, "4-6": 0, "7-9": 0, "+10": 0}
   let result3 ={"1": 0, "2": 0, "3": 0,"4": 0,"5": 0,"6": 0,"7": 0,"8": 0,"9": 0,"10": 0}
@@ -89,10 +117,10 @@ function tratarDados(value, total){
     return null;
   })
    let obj = {};
-   let data_funcionarios = formataDados(result, total);
-   let data_equipe = formataDados(result2, total);
-   let data_satisfacao = formataDados(result3, total);
-   let data_avaliacao = formataDados(result4, total);
+   let data_funcionarios = FormataDados(result, total);
+   let data_equipe = FormataDados(result2, total);
+   let data_satisfacao = FormataDados(result3, total);
+   let data_avaliacao = FormataDados(result4, total);
 
    obj['data_funcionarios'] = data_funcionarios;
    obj['data_equipe'] = data_equipe;
@@ -101,17 +129,16 @@ function tratarDados(value, total){
    return obj;
 }
 
-function formataDados(value, total){
+function FormataDados(value, total){
   let data = [];
   for (let [key] of Object.entries(value)) {
       let obj = {};
       obj['name'] = key
-      obj['val'] = value[key]/total;
-      obj['val'] = isNaN(obj['val']) ? 0 : obj['val'];
+      obj['media de respostas'] = value[key]/total;
+      obj['media de respostas'] = isNaN(obj['media de respostas']) ? 0 : obj['media de respostas'];
       data.push(obj)
     }
     return data;
 }
-
 
 export default Grafico;

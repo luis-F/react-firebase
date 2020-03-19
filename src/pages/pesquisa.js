@@ -1,18 +1,22 @@
 import React from 'react';
 
-import RadioButtonsGroup from '../components/formRadio_component';
-import firebase from '../firebase/firebase';
 import Header from '../components/header_component';
 
-import {makeStyles} from '@material-ui/core/styles';
+import firebase from '../firebase/firebase';
+
+import RadioButtonsGroup from '../components/formRadio_component';
 import Card from '@material-ui/core/Card';
 import Paper from '@material-ui/core/Paper';
+import {makeStyles} from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   card: {
     width: '100%',
     paddingTop: '1%',
-    boxShadow: '0 0 8px 0 rgba(0, 0, 0, 0.2)'
+    boxShadow: '0 0 8px 0 rgba(0, 0, 0, 0.2)',
+    backgroundColor: '#bfbcbb',
+    maxWidth: '76%',
+    marginLeft: '10%'
   },
 }));
 
@@ -77,6 +81,7 @@ function Funcionarios(){
     "mais de 500"
   ];
   const values_array = ["1-50","51-100","101-200","201-500","+500"]
+
   return (
     <RadioButtonsGroup pergunta={pergunta}
       aria_label_radioGroup={aria_label_radioGroup}

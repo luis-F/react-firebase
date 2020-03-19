@@ -1,15 +1,16 @@
 import React from 'react';
+
+import Header from '../components/header_component';
 import FormLoginCadastro from '../components/formFields_component';
 
+import firebase from '../firebase/firebase';
+
 import Tabs from '@material-ui/core/Tabs';
-import {withStyles, makeStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Tab from '@material-ui/core/Tab';
 import PropTypes from 'prop-types';
 import Box from '@material-ui/core/Box';
-
-import Header from '../components/header_component';
-import firebase from '../firebase/firebase';
+import {withStyles, makeStyles} from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   cardbox: {
